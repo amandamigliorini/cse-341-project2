@@ -82,7 +82,6 @@ body('ISBN13')
     .matches(/^\d+$/).withMessage('ISBN13 must contain only digits'),
 ];
 
-// Função para verificar se houve erros de validação
 const checkValidation = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

@@ -23,7 +23,6 @@ const validateCreateReader = [
   .isDate({ format: 'YYYY-MM-DD' }).withMessage('The birthday date should follow this format: YYYY-MM-DD')
 ];
 
-// Validações para atualizar um leitor (PUT /reader/:id)
 const validateUpdateReader = [
     body('firstName')
     .notEmpty().withMessage('First Name required')
@@ -40,7 +39,7 @@ const validateUpdateReader = [
     .optional().isDate({ format: 'YYYY-MM-DD' }).withMessage('The birthday date should follow this format: YYYY-MM-DD')
 ];
 
-// Função para verificar se houve erros de validação
+
 const checkValidation = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
