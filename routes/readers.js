@@ -19,6 +19,6 @@ router.put('/:id',
     readersValidator.checkValidation,
     readersController.updateReader);
 
-router.delete('/:id', readersController.deleteReader);
+router.delete('/:id', auth.isAuthenticated, readersController.deleteReader);
 
 module.exports = router;

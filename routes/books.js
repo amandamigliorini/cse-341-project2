@@ -19,6 +19,6 @@ router.put('/:id',
     booksValidator.checkValidation,
     booksController.updateBook);
 
-router.delete('/:id', booksController.deleteBook);
+    router.delete('/:id', auth.isAuthenticated, booksController.deleteBook);
 
 module.exports = router;
