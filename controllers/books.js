@@ -3,21 +3,35 @@ const ObjectId = require('mongodb').ObjectId;
 
 const getAll = async (req, res) => {
     //#swagger.tags=['Books']
-    const result = await mongodb.getDatabase().db().collection('books').find();
-    result.toArray().then((book) => {
+    try {
+        const result = await mongodb.getDatabase().db().collection('books').find();
+        const books = await result.toArray();
+        
         res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(book)
-    });
+        res.status(200).json(books);
+    } catch (error) {
+        console.error('Error while getting books', error);
+        res.status(500).json({ message: 'Some error occured while getting the books' });
+    }
 };
 
 const getSingle = async (req, res) => {
     //#swagger.tags=['Books']
-    const bookId = new ObjectId(req.params.id);
-    const result = await mongodb.getDatabase().db().collection('books').find({_id: bookId});
-    result.toArray().then((books) => {
+    try {
+        const bookId = new ObjectId(req.params.id);
+        const result = await mongodb.getDatabase().db().collection('books').find({ _id: bookId });
+        const books = await result.toArray();
+
+        if (books.length === 0) {
+            return res.status(404).json({ message: 'Book not finded.' });
+        }
+
         res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(books[0])
-    });
+        res.status(200).json(books[0]);
+    } catch (error) {
+        console.error('Erro ao buscar o livro:', error);
+        res.status(500).json({ message: 'Some error occured while getting the book' });
+    }
 };
 
 const addBook = async (req, res) => {

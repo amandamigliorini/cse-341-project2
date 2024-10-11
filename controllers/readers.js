@@ -3,21 +3,35 @@ const ObjectId = require('mongodb').ObjectId;
 
 const getAll = async (req, res) => {
     //#swagger.tags=['Readers']
-    const result = await mongodb.getDatabase().db().collection('readers').find();
-    result.toArray().then((readers) => {
+    try {
+        const result = await mongodb.getDatabase().db().collection('readers').find();
+        const readers = await result.toArray();
+
         res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(readers)
-    });
+        res.status(200).json(readers);
+    } catch (error) {
+        console.error('Error fetching readers:', error);
+        res.status(500).json({ message: 'An error occurred while fetching the readers.' });
+    }
 };
 
 const getSingle = async (req, res) => {
-    //#swagger.tags=['Readers']
-    const readerId = new ObjectId(req.params.id);
-    const result = await mongodb.getDatabase().db().collection('readers').find({_id: readerId});
-    result.toArray().then((readers) => {
+    //#swagger.tags=['Books']
+    try {
+        const readerId = new ObjectId(req.params.id);
+        const result = await mongodb.getDatabase().db().collection('readers').find({ _id: readerId });
+        const readers = await result.toArray();
+
+        if (readers.length === 0) {
+            return res.status(404).json({ message: 'Reader not find.' });
+        }
+
         res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(readers[0])
-    });
+        res.status(200).json(readers[0]);
+    } catch (error) {
+        console.error('Erro ao buscar o livro:', error);
+        res.status(500).json({ message: 'Some error occured while getting the reader' });
+    }
 };
 
 const createReader = async (req, res) => {
